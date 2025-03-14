@@ -1,1 +1,3 @@
-console.log('main.js loaded');
+import OverlayMenu from "@/modules/OverlayMenu.js";
+
+new OverlayMenu();
