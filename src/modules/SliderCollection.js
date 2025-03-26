@@ -15,15 +15,15 @@ class Slider {
   }
 
   constructor(rootElement) {
-    this.rootElement = rootElement
-    this.swiperElement = this.rootElement.querySelector(this.selectors.swiper)
-    this.params = getParams(this.rootElement, this.selectors.root)
+    this.rootElement = rootElement;
+    this.swiperElement = this.rootElement.querySelector(this.selectors.swiper);
+    this.params = getParams(this.rootElement, this.selectors.root);
     this.navigationElement = this.params.navigationTargetElementId
       ? document.getElementById(this.params.navigationTargetElementId)
-      : this.rootElement.querySelector(this.selectors.navigation)
-    this.previousButtonElement = this.navigationElement.querySelector(this.selectors.previousButton)
-    this.nextButtonElement = this.navigationElement.querySelector(this.selectors.nextButton)
-    this.paginationElement = this.navigationElement.querySelector(this.selectors.pagination)
+      : this.rootElement.querySelector(this.selectors.navigation);
+    this.previousButtonElement = this.navigationElement.querySelector(this.selectors.previousButton);
+    this.nextButtonElement = this.navigationElement.querySelector(this.selectors.nextButton);
+    this.paginationElement = this.navigationElement.querySelector(this.selectors.pagination);
     this.init()
   }
 

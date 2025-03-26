@@ -16,14 +16,14 @@ const Categories = (props) => {
     <Section
       title="Explore our wide variety of categories"
       titleId="categories-title"
-      descriptionId="Whether you're looking for a comedy to make you laugh, a drama to make you think, or a documentary to learn something new"
+      description="Whether you're looking for a comedy to make you laugh, a drama to make you think, or a documentary to learn something new"
+      isActionsHiddenOnMobile
       actions={(
         <SliderNavigation
           mode={'tile'}
           id={sliderNavigationId}
         />
       )}
-      isActionsHiddenOnMobile
     >
       <Slider navigationTargetElementId={sliderNavigationId}>
         {categoryItems.map((categoryItem, index) => (
