@@ -4,7 +4,7 @@ import classNames from 'classnames'
 const Grid = (props) => {
     const {
         className,
-        columns=1,
+        columns= 1,
         children,
     } = props
 
