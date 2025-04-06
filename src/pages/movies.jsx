@@ -1,9 +1,15 @@
+import MoviesBanner from "@/sections/MoviesBanner";
+import Collections from "@/sections/Collections/index.js";
+
 export const metadata = {
     title: 'Movies & Shows',
 }
 
 export default function () {
     return (
-        <h1>Movies</h1>
+      <>
+          <MoviesBanner />
+          <Collections />
+      </>
     )
 }

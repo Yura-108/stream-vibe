@@ -8,8 +8,7 @@ const Button = (props) => {
         className, href, type = 'button',
         target, label, isLabelHidden = false,
         iconName, iconPosition = 'before', mode='',
-        hasFillIcon,
-        extraAttrs
+        hasFillIcon, extraAttrs
     } = props;
     const isLink = href !== undefined;
     const Component = isLink ? 'a' : 'button';
