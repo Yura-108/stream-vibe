@@ -1,5 +1,6 @@
 import getParams from "@/utils/getParams.js";
 import BaseComponent from "@/modules/generic/BaseComponent.js";
+import pxToRem from "@/utils/pxToRem.js";
 
 const rootSelector = '[data-js-tabs]';
 
@@ -16,8 +17,8 @@ class Tabs extends BaseComponent {
   }
 
   stateCSSVariables = {
-    activeButtonWidth: '--tabsActiveButtonWidth',
-    activeButtonOffsetLeft: '--tabsActiveButtonOffsetLeft',
+    activeButtonWidth: '--tabsNavigationActiveButtonWidth',
+    activeButtonOffsetLeft: '--tabsNavigationActiveButtonOffsetLeft',
   }
 
   constructor(rootElement) {
@@ -31,7 +32,8 @@ class Tabs extends BaseComponent {
     this.contentElements = [...this.rootElement.querySelectorAll(this.selectors.content)];
     this.state = this.getProxyState({activeTabIndex: this.buttonElements.findIndex(({ariaSelected}) => ariaSelected)})
     this.limitTabsIndex = this.buttonElements.length - 1;
-    this.bindEvents()
+    this.bindEvents();
+    setTimeout(this.bindObservers, 500);
   }
 
   updateUI() {
@@ -43,6 +45,10 @@ class Tabs extends BaseComponent {
       buttonElement.classList.toggle(this.stateClasses.isActive, isActive);
       buttonElement.ariaSelected = isActive;
       buttonElement.tabIndex = isActive ? 0 : -1;
+
+      if (isActive) {
+        this.updateNavigationCSSVars(buttonElement);
+      }
     })
 
     this.contentElements.forEach((contentElement, index) => {
@@ -50,12 +56,27 @@ class Tabs extends BaseComponent {
 
       contentElement.classList.toggle(this.stateClasses.isActive, isActive);
     })
-  }
+  };
+
+  updateNavigationCSSVars(activeButtonElement = this.buttonElements[this.state.activeTabIndex]) {
+    const {width, left} = activeButtonElement.getBoundingClientRect();
+    const offsetLeft = left - this.navigationElement.getBoundingClientRect().left;
+
+    this.navigationElement.style.setProperty(
+        this.stateCSSVariables.activeButtonWidth,
+        `${pxToRem(width)}rem`
+    );
+
+    this.navigationElement.style.setProperty(
+        this.stateCSSVariables.activeButtonOffsetLeft,
+        `${pxToRem(offsetLeft)}rem`
+    );
+  };
 
   activateTab(newTabIndex) {
     this.state.activeTabIndex = newTabIndex;
     this.buttonElements[newTabIndex].focus();
-  }
+  };
 
   previousTab = () => {
     const newTabIndex = this.state.activeTabIndex === 0
@@ -63,7 +84,7 @@ class Tabs extends BaseComponent {
       : this.state.activeTabIndex - 1;
 
     this.activateTab(newTabIndex);
-  }
+  };
 
   nextTab = () => {
     const newTabIndex = this.state.activeTabIndex === this.limitTabsIndex
@@ -71,19 +92,19 @@ class Tabs extends BaseComponent {
       : this.state.activeTabIndex + 1;
 
     this.activateTab(newTabIndex);
-  }
+  };
 
   firstTab = () => {
     this.activateTab(0);
-  }
+  };
 
   lastTab = () => {
     this.activateTab(this.limitTabsIndex);
-  }
+  };
 
   onButtonClick(buttonIndex) {
     this.state.activeTabIndex = buttonIndex;
-  }
+  };
 
   onKeyDown = (event) => {
     const {target, code, metaKey} = event;
@@ -119,7 +140,7 @@ class Tabs extends BaseComponent {
       event.preventDefault();
       action()
     }
-  }
+  };
 
   bindEvents() {
     this.buttonElements.forEach((buttonElement, index) => {
@@ -127,6 +148,16 @@ class Tabs extends BaseComponent {
     });
 
     document.addEventListener('keydown', this.onKeyDown)
+  };
+
+  onResize = () => {
+    this.updateNavigationCSSVars()
+  }
+
+  bindObservers = () => {
+    const resizeObserver = new ResizeObserver(this.onResize);
+
+    resizeObserver.observe(this.navigationElement)
   }
 }
 

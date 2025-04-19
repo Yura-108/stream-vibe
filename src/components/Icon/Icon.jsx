@@ -4,12 +4,13 @@ import {Icon as MinistaIcon} from 'minista'
 
 const Icon = (props) => {
     const {
-        className, name, hasFill = false
+        className, name, hasFill = false, ariaLabel
     } = props
 
     return (
         <span
             className={classNames(className, 'icon')}
+            aria-label={ariaLabel}
         >
             <MinistaIcon
                 fill={hasFill ? 'currentColor' : 'none'}

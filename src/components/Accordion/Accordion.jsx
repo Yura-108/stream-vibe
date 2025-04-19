@@ -1,14 +1,18 @@
 import './Accordion.scss'
 import classNames from 'classnames'
+import Icon from "@/components/Icon/index.js";
 
 const Accordion = (props) => {
   const {
     className,
     title,
+    titleLevelClassName = 'h5',
+    subtitle,
     id,
     name,
     isOpen,
-    children
+    children,
+    isArrowButton = false,
   } = props;
 
   return (
@@ -17,8 +21,14 @@ const Accordion = (props) => {
     >
       <details className="accordion__details" name={name} open={isOpen}>
         <summary className="accordion__summary">
-          <h3 className="accordion__title h5">
+          <h3 className={classNames("accordion__title", titleLevelClassName)}>
             <span role={"term"} aria-details={id}>{title}</span>
+            {subtitle && (<span className={"accordion__subtitle"}>{subtitle}</span>)}
+            {isArrowButton && (
+              <div className={"accordion__arrow"}>
+                <Icon name={"arrow-down"} />
+              </div>
+            )}
           </h3>
         </summary>
       </details>

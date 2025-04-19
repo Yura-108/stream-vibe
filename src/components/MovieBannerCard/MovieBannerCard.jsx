@@ -7,18 +7,23 @@ const MovieBannerCard = (props) => {
   const {
     className,
     title,
+    titleId,
+    TitleTag = 'h2',
     description,
-    imgSrc
-  } = props
+    imgSrc,
+    isSmallPaddingY = false,
+  } = props;
 
   return (
     <div
       className={classNames(className, 'movie-banner-card')}
     >
-      <Image src={imgSrc} className={"movie-banner-card__image"} />
-      <div className="movie-banner-card__inner">
+      <Image src={imgSrc} className={"movie-banner-card__image"}/>
+      <div className={classNames("movie-banner-card__inner", {
+        'movie-banner-card__inner--small-padding-y': isSmallPaddingY
+      })}>
         <div className="movie-banner-card__body">
-          <h2 className={"movie-banner-card__title h3"}>{title}</h2>
+          <TitleTag id={titleId} className={"movie-banner-card__title h3"}>{title}</TitleTag>
           <div className="movie-banner-card__description hidden-mobile">
             <p>{description}</p>
           </div>

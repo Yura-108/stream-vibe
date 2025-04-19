@@ -17,14 +17,14 @@ const Collections = (props) => {
   return (
     <Tabs
       className={classNames(className, 'collections container')}
-      title={"collection"}
+      title={"collections"}
       isEnableOnlyOnMobile
       items={collectionGroups.map((collectionGroup, index) => ({
         isActive: collectionGroup.isActive,
         title: collectionGroup.title,
         children: (
-          <div className={classNames(className, 'collection__group')}>
-            <p className="collection__title hidden-mobile">{collectionGroup.title}</p>
+          <div className={classNames(className, 'collections__group')}>
+            <p className="collections__title hidden-mobile">{collectionGroup.title}</p>
             {collectionGroup.items.map((collectionItem, index) => {
               const {title, movieItems, categoryItems, sliderParams} = collectionItem;
               const titleFormatted = `${getIdFromTitle(collectionGroup.title)}-${getIdFromTitle(title)}`;

@@ -23,6 +23,10 @@
     @include mobile {
       padding-block: 16px;
     }
+
+    &--small-padding-y {
+      padding-block: fluid-to-laptop(20, 16);
+    }
   }
 
   &__body {
@@ -32,7 +36,7 @@
   }
 
   &__description {
-    max-width: fluid-to-laptop(1194, 960);
+    max-width: fluid-to-laptop(1254, 960);
   }
 
   &__footer {
