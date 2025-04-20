@@ -39,8 +39,7 @@ class Select extends BaseComponent {
       currentOptionIndex: this.originalControlElement.selectedIndex,
       selectedOptionElement: this.optionElements[this.originalControlElement.selectedIndex]
     })
-    //setTimeout(this.fixDropdownPosition, 500);
-    this.fixDropdownPosition();
+    setTimeout(this.fixDropdownPosition, 500);
     this.updateTabIndexes();
     this.bindEvents();
   }
@@ -58,7 +57,7 @@ class Select extends BaseComponent {
       this.buttonElement.textContent = newSelectedOptionValue;
       this.buttonElement.classList.toggle(this.stateClasses.isExpanded, isExpanded);
       this.buttonElement.ariaExpanded = isExpanded;
-      this.buttonElement.ariaActiveDescendant = this.optionElements[currentOptionIndex];
+      this.buttonElement.ariaActiveDescendant = this.optionElements[currentOptionIndex].id;
     }
 
     const updateDropdown = () => {
@@ -82,8 +81,7 @@ class Select extends BaseComponent {
     updateOptions();
   }
 
-  fixDropdownPosition() {
-    console.log(this.dropdownElement);
+  fixDropdownPosition = () => {
     const viewportWidth = document.documentElement.clientWidth;
     const viewportCenterX = viewportWidth / 2;
     const {width, x} = this.buttonElement.getBoundingClientRect();
@@ -104,7 +102,7 @@ class Select extends BaseComponent {
 
   updateTabIndexes(isMobileDevice = MatchMedia.mobile.matches) {
     this.originalControlElement.tabIndex = isMobileDevice ? 0 : -1;
-    this.buttonElement.tabIndex = !isMobileDevice ? 0 : -1;
+    this.buttonElement.tabIndex = isMobileDevice ? -1 : 0;
   }
 
   toggleExpandedState() {
@@ -143,7 +141,6 @@ class Select extends BaseComponent {
 
   onClick = (e) => {
     const {target} = e;
-
     const isButtonClick = target === this.buttonElement;
     const isOutsideDropdownClick = target.closest(this.selectors.dropdown) !== this.dropdownElement;
 
@@ -156,8 +153,72 @@ class Select extends BaseComponent {
 
     if (isOptionClick) {
       this.state.selectedOptionElement = target;
-      this.state.currentOptionIndex = [...this.optionElements].findIndex((optionElement) => optionElement === target);
+      this.state.currentOptionIndex = [...this.optionElements].findIndex(optionElement => optionElement === target)
       this.collapse();
+    }
+  }
+
+  onArrowUpKeyDown = () => {
+    if(this.isNeedToExpand) {
+      this.expand();
+      return
+    }
+
+    if (this.state.currentOptionIndex > 0) {
+      this.state.currentOptionIndex--;
+    }
+  }
+
+  onArrowDownKeyDown = () => {
+
+    if(this.isNeedToExpand) {
+      this.expand();
+      return
+    }
+
+    if (this.state.currentOptionIndex < this.optionElements.length - 1) {
+      this.state.currentOptionIndex++;
+    }
+  }
+
+  onSpaceKeyDown = () => {
+    if(this.isNeedToExpand) {
+      this.expand();
+      return
+    }
+
+    this.selectCurrentOption();
+    this.collapse();
+  }
+
+  onEnterKeyDown = () => {
+    if(this.isNeedToExpand) {
+      this.expand();
+      return
+    }
+
+    this.selectCurrentOption();
+    this.collapse();
+  }
+
+  onEscapeKeyDown = () => {
+    this.collapse();
+  }
+
+  onKeyDown = (e) => {
+    const {code} = e;
+
+    const action = {
+      ArrowUp: this.onArrowUpKeyDown,
+      ArrowDown: this.onArrowDownKeyDown,
+      Space: this.onSpaceKeyDown,
+      Enter: this.onEnterKeyDown,
+      Escape: this.onEscapeKeyDown,
+    }[code];
+
+    if (action) {
+      e.preventDefault();
+      action()
     }
   }
 
@@ -166,7 +227,7 @@ class Select extends BaseComponent {
     this.originalControlElement.addEventListener('change', this.onOriginalControlChange);
     this.buttonElement.addEventListener('click', this.onButtonClick);
     document.addEventListener('click', this.onClick);
-
+    this.rootElement.addEventListener('keydown', this.onKeyDown);
   }
 }
 

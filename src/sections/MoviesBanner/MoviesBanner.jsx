@@ -45,6 +45,7 @@ const MoviesBanner = (props) => {
         sliderParams={{slidesPerView: 1, breakpoints: {1024: {allowTouchMove: false}}}}
         navigationPosition={"abs-bottom"}
         hasScrollbarOnMobile={false}
+        navigationJustifyContent={'space-between'}
       >
         {moviesCards.map((moviesCard, index) => (
           <MovieBannerCard {...moviesCard} key={index} />

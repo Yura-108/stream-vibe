@@ -1,7 +1,11 @@
 .slider-navigation {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+
+  &--space-between {
+    justify-content: space-between;
+  }
 
   &--tile {
     column-gap: fluid-to-laptop(16, 12);
